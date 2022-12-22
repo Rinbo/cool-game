@@ -7,8 +7,6 @@ enum BallCollision {
   FLOOR,
   LEFT_WALL,
   RIGHT_WALL,
-  BOTTOM_OF_BRICK,
-  TOP_OF_BRICK,
   TOP_OF_PADDLE,
   NO_COLLISION
 }
@@ -81,8 +79,6 @@ export default class Ball implements GameObject {
     if (this.getBallLeftX() <= 0) return BallCollision.LEFT_WALL;
     if (this.getBallRightX() >= this.canvas.width) return BallCollision.RIGHT_WALL;
     if (this.isPaddleHit()) return BallCollision.TOP_OF_PADDLE;
-    if (false) return BallCollision.BOTTOM_OF_BRICK;
-    if (false) return BallCollision.TOP_OF_BRICK;
     return BallCollision.NO_COLLISION;
   }
 
@@ -103,8 +99,6 @@ export default class Ball implements GameObject {
       case BallCollision.RIGHT_WALL:
         this.reverseXVelocity();
         break;
-      case BallCollision.BOTTOM_OF_BRICK:
-      case BallCollision.TOP_OF_BRICK:
       default:
     }
   }

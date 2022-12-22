@@ -108,6 +108,15 @@ export default class Game {
     return this.paddle;
   }
 
+  getLevel(): number {
+    return this.level;
+  }
+
+  // Lives has to be set on game level. Everytime ball gets recreated, the lives get reset with current setup
+  getLives(): number {
+    return this.props.game.lives - this.ball.getMissCount();
+  }
+
   private run() {
     this.draw();
     this.paddle.update();
@@ -184,6 +193,7 @@ export default class Game {
   }
 
   private handlePaused() {
+    console.log('PAUSED');
     this.draw();
     this.drawOverlayText('PAUSED', 'rgba(0,0,0,0.5)');
   }
