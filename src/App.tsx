@@ -3,13 +3,10 @@ import './App.css';
 import Game from './game/game';
 import { properties } from './game/properties';
 
-const MAX_FPS = 60;
-const TIME_STEP = 1000 / MAX_FPS;
+const FPS = 60;
 
 function App() {
   const game = React.useRef<Game>();
-  const lastTimestamp = React.useRef<number>(0);
-  const tick = React.useRef<number>(0);
   const [lives, setLives] = React.useState<number>(properties.game.lives);
   const [level, setLevel] = React.useState<number>(1);
   const { width, height } = properties.canvas;
@@ -18,7 +15,12 @@ function App() {
     const canvas = document.getElementById('game-board') as HTMLCanvasElement;
     const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
     game.current = new Game(ctx, properties);
-    requestAnimationFrame(gameLoop);
+
+    const interval = setInterval(() => {
+      requestAnimationFrame(gameLoop);
+    }, 1000 / FPS);
+
+    return () => clearInterval(interval);
   }, []);
 
   console.log("I'm re-rerendering");
@@ -30,14 +32,8 @@ function App() {
     setLevel(currentGame.getLevel());
   }
 
-  const gameLoop = React.useCallback((timestamp: number): void => {
-    requestAnimationFrame(gameLoop);
-
-    if (timestamp - lastTimestamp.current < TIME_STEP) return;
-
+  const gameLoop = React.useCallback((_timestamp: number): void => {
     executeTick();
-    tick.current = tick.current + 1;
-    lastTimestamp.current = timestamp;
   }, []);
 
   return (

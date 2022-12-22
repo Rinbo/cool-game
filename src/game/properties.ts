@@ -7,8 +7,8 @@ export const properties = {
     brickHeightRatio: 1 / 20, // as percentage of canvas height
     brickTopRowHeight: 1 / 4, // as a percentage of canvas height
     ballStartVelocity: {
-      x: 4,
-      y: -4
+      x: 8,
+      y: -8
     }
   },
   canvas: {
@@ -21,7 +21,7 @@ export const properties = {
     width: 150,
     height: 20,
     hoverHeight: 10,
-    maxSpeed: 10
+    maxSpeed: 16
   },
   ball: {
     color: '#fff',
