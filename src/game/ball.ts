@@ -19,7 +19,6 @@ export default class Ball implements GameObject {
   private position: Position;
   private radius: number;
   private velocity: Velocity;
-  private missCount: number;
   private game: Game;
 
   constructor(paddle: Paddle, game: Game) {
@@ -31,7 +30,6 @@ export default class Ball implements GameObject {
     this.position = { ...props.ball.position };
     this.radius = props.ball.radius;
     this.velocity = { ...props.game.ballStartVelocity };
-    this.missCount = 0;
     this.game = game;
   }
 
@@ -114,7 +112,7 @@ export default class Ball implements GameObject {
 
   private onFloorImpact() {
     this.reset();
-    this.missCount++;
+    this.game.decrementLives();
     this.game.transition(GameState.DEATH);
   }
 

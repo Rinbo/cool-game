@@ -17,7 +17,7 @@ function App() {
     game.current = new Game(ctx, properties);
 
     const interval = setInterval(() => {
-      requestAnimationFrame(gameLoop);
+      gameLoop();
     }, 1000 / FPS);
 
     return () => clearInterval(interval);
@@ -25,15 +25,11 @@ function App() {
 
   console.log("I'm re-rerendering");
 
-  function executeTick() {
+  const gameLoop = React.useCallback((): void => {
     const currentGame = game.current!;
     currentGame.tick();
     setLives(currentGame.getLives());
     setLevel(currentGame.getLevel());
-  }
-
-  const gameLoop = React.useCallback((_timestamp: number): void => {
-    executeTick();
   }, []);
 
   return (
