@@ -1,7 +1,7 @@
 import { createLevel } from './levels';
 import Paddle from './paddle';
 import EventHandler from './input';
-import { Properties } from './properties';
+import { Properties, Velocity, Size } from './properties';
 import Ball from './ball';
 import Brick from './brick';
 
@@ -30,9 +30,9 @@ export default class Game {
   constructor(ctx: CanvasRenderingContext2D, properties: Properties) {
     this.ctx = ctx;
     this.state = GameState.NEW_GAME;
-    this.props = properties;
+    this.props = { ...properties };
     this.paddle = new Paddle(properties);
-    this.ball = new Ball(this.paddle, this);
+    this.ball = new Ball(this, this.paddle);
     this.level = 1;
     this.lives = properties.game.lives;
     this.bricks = [];
@@ -41,7 +41,9 @@ export default class Game {
 
   start() {
     this.bricks = createLevel(this, this.level);
-    this.ball = new Ball(this.paddle, this);
+    this.paddle = new Paddle(this.props);
+    this.ball = new Ball(this, this.paddle);
+    EventHandler.initEventHandlers(this, this.paddle);
     this.transition(GameState.RUNNABLE);
   }
 
@@ -223,7 +225,20 @@ export default class Game {
   }
 
   private handleNewLevel() {
+    this.incrementBallStartVelocity();
+    if (this.level % 2 === 0) this.decreasePaddleSize();
     this.start();
+  }
+
+  private incrementBallStartVelocity(): void {
+    const { x, y }: Velocity = this.props.game.ballStartVelocity;
+    this.props.game.ballStartVelocity = { x: x + 1, y: y - 1 };
+  }
+
+  private decreasePaddleSize(): void {
+    const { width: currentWidth, minWidth, levelDecrementValue } = this.props.paddle;
+    if (currentWidth <= minWidth) return;
+    this.props.paddle.width -= levelDecrementValue;
   }
 
   private drawOverlayText(text: string, color: string = 'rgba(20,20,20,1)'): void {

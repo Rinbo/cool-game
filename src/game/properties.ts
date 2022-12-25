@@ -22,7 +22,9 @@ export const properties = {
     width: 150,
     height: 20,
     hoverHeight: 10,
-    maxSpeed: 16
+    maxSpeed: 16,
+    minWidth: 60,
+    levelDecrementValue: 20
   },
   ball: {
     color: '#fff',

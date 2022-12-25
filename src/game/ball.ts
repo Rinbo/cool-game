@@ -21,7 +21,7 @@ export default class Ball implements GameObject {
   private velocity: Velocity;
   private game: Game;
 
-  constructor(paddle: Paddle, game: Game) {
+  constructor(game: Game, paddle: Paddle) {
     const props: Properties = game.getProps();
 
     this.canvas = props.canvas;
