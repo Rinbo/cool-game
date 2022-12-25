@@ -30,7 +30,7 @@ export default class Game {
   constructor(ctx: CanvasRenderingContext2D) {
     this.ctx = ctx;
     this.state = GameState.NEW_GAME;
-    this.props = { ...properties };
+    this.props = this.deepCopy(properties);
     this.paddle = new Paddle(properties);
     this.ball = new Ball(this, this.paddle);
     this.level = 1;
@@ -221,7 +221,7 @@ export default class Game {
   }
 
   private handleNewGame() {
-    this.props = { ...properties };
+    this.props = this.deepCopy(properties);
     this.lives = this.props.game.lives;
     this.level = 1;
     this.drawOverlayText('PRESS SPACE TO BEGIN');
@@ -241,7 +241,12 @@ export default class Game {
 
   private handleNewLevel() {
     this.incrementBallStartVelocity();
-    if (this.level % 2 === 0) this.decreasePaddleSize();
+
+    if (this.level % 2 === 0) {
+      this.lives += 1;
+      this.decreasePaddleSize();
+    }
+
     this.start();
   }
 
@@ -267,5 +272,9 @@ export default class Game {
     this.ctx.fillStyle = 'white';
     this.ctx.textAlign = 'center';
     this.ctx.fillText(text, width / 2, height / 2);
+  }
+
+  private deepCopy(props: Properties): Properties {
+    return JSON.parse(JSON.stringify(props));
   }
 }
