@@ -1,7 +1,7 @@
 import { createLevel } from './levels';
 import Paddle from './paddle';
 import EventHandler from './input';
-import { Properties, Velocity, Size } from './properties';
+import { Properties, Velocity, properties } from './properties';
 import Ball from './ball';
 import Brick from './brick';
 
@@ -27,7 +27,7 @@ export default class Game {
   private lives: number;
   private bricks: Array<Brick>;
 
-  constructor(ctx: CanvasRenderingContext2D, properties: Properties) {
+  constructor(ctx: CanvasRenderingContext2D) {
     this.ctx = ctx;
     this.state = GameState.NEW_GAME;
     this.props = { ...properties };
@@ -62,10 +62,10 @@ export default class Game {
         this.handleDeath();
         break;
       case GameState.GAME_OVER:
-        this.drawOverlayText('GAME OVER', 'rgba(0,0,0,1)'); // Add handle function
+        this.handleGameOver();
         break;
       case GameState.GAME_COMPLETE:
-        this.drawOverlayText('GAME COMPLETED! YOU WON :)', 'rgba(0,0,0,1)'); // Add handle function
+        this.handleGameComplete();
         break;
       case GameState.LEVEL_COMPLETE:
         this.handleLevelComplete();
@@ -168,9 +168,9 @@ export default class Game {
       case GameState.DEATH:
         return [GameState.GAME_OVER, GameState.RUNNABLE, GameState.WAITING];
       case GameState.GAME_OVER:
-        return [GameState.NEW_GAME];
+        return [GameState.WAITING];
       case GameState.GAME_COMPLETE:
-        return [GameState.NEW_GAME];
+        return [GameState.WAITING];
       case GameState.LEVEL_COMPLETE:
         return [GameState.WAITING];
       case GameState.NEW_GAME:
@@ -182,7 +182,7 @@ export default class Game {
       case GameState.RUNNABLE:
         return [GameState.DEATH, GameState.GAME_COMPLETE, GameState.GAME_OVER, GameState.LEVEL_COMPLETE, GameState.PAUSED];
       case GameState.WAITING:
-        return [GameState.NEW_LEVEL, GameState.RUNNABLE];
+        return [GameState.NEW_LEVEL, GameState.RUNNABLE, GameState.NEW_GAME];
 
       default:
         console.warn('no valid transition found for ' + this.state);
@@ -208,7 +208,22 @@ export default class Game {
     setTimeout(() => this.transition(GameState.RUNNABLE), 1500);
   }
 
+  private handleGameOver(): void {
+    this.drawOverlayText('GAME OVER', 'rgba(0,0,0,1)');
+    this.transition(GameState.WAITING);
+    setTimeout(() => this.transition(GameState.NEW_GAME), 2000);
+  }
+
+  private handleGameComplete(): void {
+    this.drawOverlayText('GAME COMPLETED! YOU ARE A MASTER', 'rgba(0,0,0,1)');
+    this.transition(GameState.WAITING);
+    setTimeout(() => this.transition(GameState.NEW_GAME), 4000);
+  }
+
   private handleNewGame() {
+    this.props = { ...properties };
+    this.lives = this.props.game.lives;
+    this.level = 1;
     this.drawOverlayText('PRESS SPACE TO BEGIN');
   }
 

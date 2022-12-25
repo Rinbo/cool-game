@@ -67,10 +67,6 @@ export default class Ball implements GameObject {
     return this.radius;
   }
 
-  getMissCount(): number {
-    return this.missCount;
-  }
-
   private getCollisionState(): BallCollision {
     if (this.getTopOfBallY() <= 0) return BallCollision.CEILING;
     if (this.getBottomOfBallY() >= this.canvas.height) return BallCollision.FLOOR;

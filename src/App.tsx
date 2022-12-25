@@ -14,7 +14,7 @@ function App() {
   React.useEffect(() => {
     const canvas = document.getElementById('game-board') as HTMLCanvasElement;
     const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
-    game.current = new Game(ctx, properties);
+    game.current = new Game(ctx);
 
     const interval = setInterval(() => {
       gameLoop();
