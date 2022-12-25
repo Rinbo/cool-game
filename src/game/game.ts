@@ -180,7 +180,7 @@ export default class Game {
       case GameState.RUNNABLE:
         return [GameState.DEATH, GameState.GAME_COMPLETE, GameState.GAME_OVER, GameState.LEVEL_COMPLETE, GameState.PAUSED];
       case GameState.WAITING:
-        return [GameState.NEW_LEVEL];
+        return [GameState.NEW_LEVEL, GameState.RUNNABLE];
 
       default:
         console.warn('no valid transition found for ' + this.state);
@@ -189,8 +189,7 @@ export default class Game {
   }
 
   private isLevelComplete() {
-    const { bricksPerRow, rows } = this.props.game;
-    return this.bricks.filter(brick => !brick.isVisable()).length === rows * bricksPerRow;
+    return !this.bricks.some(brick => brick.isVisable());
   }
 
   private handleDeath(): void {
