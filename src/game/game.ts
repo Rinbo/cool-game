@@ -27,8 +27,9 @@ export default class Game {
   private lives: number;
   private bricks: Array<Brick>;
   private heart: HTMLImageElement;
+  private isTouch: boolean;
 
-  constructor(ctx: CanvasRenderingContext2D) {
+  constructor(ctx: CanvasRenderingContext2D, isTouch: boolean) {
     this.ctx = ctx;
     this.state = GameState.NEW_GAME;
     this.props = properties;
@@ -40,18 +41,25 @@ export default class Game {
 
     this.heart = new Image();
     this.heart.src = 'lives.png';
+
+    this.isTouch = isTouch;
+
     EventHandler.initEventHandlers(this, this.paddle);
   }
 
-  reset() {
+  start(): void {
+    this.transition(GameState.RUNNABLE);
+  }
+
+  reset(): void {
     this.bricks = createLevel(this, this.level);
     this.paddle = new Paddle(this.props);
     this.ball = new Ball(this, this.paddle);
     EventHandler.initEventHandlers(this, this.paddle);
   }
 
-  start() {
-    this.transition(GameState.RUNNABLE);
+  restore(): void {
+    this.ctx.restore();
   }
 
   togglePause() {
@@ -231,7 +239,7 @@ export default class Game {
     this.lives = this.props.game.lives;
     this.level = 1;
     this.reset();
-    this.drawOverlayText('PRESS SPACE TO BEGIN');
+    this.drawOverlayText(this.isTouch ? 'TOUCH HERE TO BEGIN' : 'PRESS SPACE TO BEGIN');
   }
 
   private handlePaused() {
@@ -288,7 +296,8 @@ export default class Game {
     this.ctx.fillStyle = 'white';
     this.ctx.fillText('LEVEL ' + this.level, 40, 20);
 
-    this.ctx.font = '16px bold Arial';
+    this.ctx.font = '20px bold Arial';
+    this.ctx.fillStyle = 'white';
     this.ctx.drawImage(this.heart, width - 50, 10, 40, 40);
     this.ctx.fillText('' + this.lives, width - 30, 37);
   }
