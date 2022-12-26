@@ -15,7 +15,8 @@ export const properties = {
   canvas: {
     width: 800,
     height: 600,
-    color: '#000'
+    color: '#050505',
+    padding: 8
   },
   paddle: {
     color: '#0ff',

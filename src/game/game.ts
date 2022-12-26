@@ -26,34 +26,40 @@ export default class Game {
   private level: number;
   private lives: number;
   private bricks: Array<Brick>;
+  private heart: HTMLImageElement;
 
   constructor(ctx: CanvasRenderingContext2D) {
     this.ctx = ctx;
     this.state = GameState.NEW_GAME;
-    this.props = this.deepCopy(properties);
+    this.props = properties;
     this.paddle = new Paddle(properties);
     this.ball = new Ball(this, this.paddle);
     this.level = 1;
     this.lives = properties.game.lives;
     this.bricks = [];
+
+    this.heart = new Image();
+    this.heart.src = 'lives.png';
     EventHandler.initEventHandlers(this, this.paddle);
   }
 
-  start() {
+  reset() {
     this.bricks = createLevel(this, this.level);
     this.paddle = new Paddle(this.props);
     this.ball = new Ball(this, this.paddle);
     EventHandler.initEventHandlers(this, this.paddle);
+  }
+
+  start() {
     this.transition(GameState.RUNNABLE);
   }
 
   togglePause() {
     if (this.state === GameState.RUNNABLE) {
       this.transition(GameState.PAUSED);
-      return;
+    } else if (this.state === GameState.PAUSED) {
+      this.transition(GameState.RUNNABLE);
     }
-
-    this.transition(GameState.RUNNABLE);
   }
 
   tick() {
@@ -83,7 +89,6 @@ export default class Game {
         this.run();
         break;
       case GameState.WAITING:
-        console.log('WAITING');
         break;
 
       default:
@@ -161,6 +166,7 @@ export default class Game {
     this.ctx.clearRect(0, 0, canvas.width, canvas.height);
     this.ctx.fillStyle = canvas.color;
     this.ctx.fillRect(0, 0, canvas.width, canvas.height);
+    this.drawGameStats();
   }
 
   private getAllowedTransitions(): Array<GameState> {
@@ -215,7 +221,7 @@ export default class Game {
   }
 
   private handleGameComplete(): void {
-    this.drawOverlayText('GAME COMPLETED! YOU ARE A MASTER', 'rgba(0,0,0,1)');
+    this.drawOverlayText('GAME COMPLETED!', 'rgba(0,0,0,1)');
     this.transition(GameState.WAITING);
     setTimeout(() => this.transition(GameState.NEW_GAME), 4000);
   }
@@ -224,11 +230,11 @@ export default class Game {
     this.props = this.deepCopy(properties);
     this.lives = this.props.game.lives;
     this.level = 1;
+    this.reset();
     this.drawOverlayText('PRESS SPACE TO BEGIN');
   }
 
   private handlePaused() {
-    console.log('PAUSED');
     this.draw();
     this.drawOverlayText('PAUSED', 'rgba(0,0,0,0.5)');
   }
@@ -247,6 +253,7 @@ export default class Game {
       this.decreasePaddleSize();
     }
 
+    this.reset();
     this.start();
   }
 
@@ -272,6 +279,18 @@ export default class Game {
     this.ctx.fillStyle = 'white';
     this.ctx.textAlign = 'center';
     this.ctx.fillText(text, width / 2, height / 2);
+  }
+
+  private drawGameStats(): void {
+    const { width } = this.props.canvas;
+
+    this.ctx.font = '16px Arial';
+    this.ctx.fillStyle = 'white';
+    this.ctx.fillText('LEVEL ' + this.level, 40, 20);
+
+    this.ctx.font = '16px bold Arial';
+    this.ctx.drawImage(this.heart, width - 50, 10, 40, 40);
+    this.ctx.fillText('' + this.lives, width - 30, 37);
   }
 
   private deepCopy(props: Properties): Properties {

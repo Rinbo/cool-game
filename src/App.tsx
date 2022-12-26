@@ -7,13 +7,14 @@ const FPS = 60;
 
 function App() {
   const game = React.useRef<Game>();
-  const [lives, setLives] = React.useState<number>(properties.game.lives);
-  const [level, setLevel] = React.useState<number>(1);
-  const { width, height } = properties.canvas;
+  const [width, setWidth] = React.useState<number>();
+  const [height, setHeight] = React.useState<number>();
 
   React.useEffect(() => {
     const canvas = document.getElementById('game-board') as HTMLCanvasElement;
     const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+    setCanvasSizeProperties();
+
     game.current = new Game(ctx);
 
     const interval = setInterval(() => {
@@ -25,17 +26,26 @@ function App() {
 
   console.log("I'm re-rerendering");
 
+  const setCanvasSizeProperties = (): void => {
+    const { width: maxWidth, height: maxHeight, padding } = properties.canvas;
+
+    const canvasWidth = Math.min(window.innerWidth - padding, maxWidth);
+    const canvasHeight = Math.min(window.innerHeight - padding, maxHeight);
+    setWidth(canvasWidth);
+    setHeight(canvasHeight);
+    properties.canvas.width = canvasWidth;
+    properties.canvas.height = canvasHeight;
+  };
+
+  window.onresize = setCanvasSizeProperties;
+
   const gameLoop = React.useCallback((): void => {
     const currentGame = game.current!;
     currentGame.tick();
-    setLives(currentGame.getLives());
-    setLevel(currentGame.getLevel());
   }, []);
 
   return (
-    <div className="App">
-      <div>Lives: {lives}</div>
-      <div>Level: {level}</div>
+    <div>
       <canvas style={{ border: '1px solid grey', borderRadius: 10 }} id="game-board" width={width} height={height} />
     </div>
   );
