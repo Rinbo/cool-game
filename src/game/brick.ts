@@ -29,7 +29,7 @@ export default class Brick implements GameObject {
   update() {
     if (this.collisionDetected()) {
       this.game.getBall().reverseYVelocity();
-
+      this.game.scorePoint();
       this.shouldDraw = false;
     }
   }

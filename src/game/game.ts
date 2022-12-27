@@ -25,6 +25,7 @@ export default class Game {
   private ball: Ball;
   private level: number;
   private lives: number;
+  private score: number;
   private bricks: Array<Brick>;
   private heart: HTMLImageElement;
   private isTouch: boolean;
@@ -37,6 +38,7 @@ export default class Game {
     this.ball = new Ball(this, this.paddle);
     this.level = 1;
     this.lives = properties.game.lives;
+    this.score = 0;
     this.bricks = [];
 
     this.heart = new Image();
@@ -143,6 +145,10 @@ export default class Game {
 
   incrementLives(): void {
     this.lives += 1;
+  }
+
+  scorePoint(): void {
+    this.score += this.level;
   }
 
   private run() {
@@ -295,6 +301,10 @@ export default class Game {
     this.ctx.font = '16px Arial';
     this.ctx.fillStyle = 'white';
     this.ctx.fillText('LEVEL ' + this.level, 40, 20);
+
+    this.ctx.font = '22px Arial';
+    this.ctx.fillStyle = 'white';
+    this.ctx.fillText(this.score.toString(), width / 2, 20);
 
     this.ctx.font = '20px bold Arial';
     this.ctx.fillStyle = 'white';
