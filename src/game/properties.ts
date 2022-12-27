@@ -2,7 +2,7 @@ import { GameState } from './game';
 export const properties = {
   game: {
     lives: 3,
-    maxLevel: 5,
+    maxLevel: 20,
     bricksPerRow: 8,
     rows: 4,
     brickHeightRatio: 1 / 20, // as percentage of canvas height

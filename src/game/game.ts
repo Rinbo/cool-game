@@ -229,13 +229,13 @@ export default class Game {
   }
 
   private handleGameOver(): void {
-    this.drawOverlayText('GAME OVER', 'rgba(0,0,0,1)');
+    this.drawDoubleOverlayText('GAME OVER', 'Your score: ' + this.score, 'rgba(0,0,0,1)');
     this.transition(GameState.WAITING);
     setTimeout(() => this.transition(GameState.NEW_GAME), 2000);
   }
 
   private handleGameComplete(): void {
-    this.drawOverlayText('GAME COMPLETED!', 'rgba(0,0,0,1)');
+    this.drawDoubleOverlayText('GAME COMPLETED!', 'Your score: ' + this.score, 'rgba(0,0,0,1)');
     this.transition(GameState.WAITING);
     setTimeout(() => this.transition(GameState.NEW_GAME), 4000);
   }
@@ -293,6 +293,20 @@ export default class Game {
     this.ctx.fillStyle = 'white';
     this.ctx.textAlign = 'center';
     this.ctx.fillText(text, width / 2, height / 2);
+  }
+
+  private drawDoubleOverlayText(topText: string, subtext: string, color: string = 'rgba(20,20,20,1)'): void {
+    const { width, height } = this.props.canvas;
+
+    this.ctx.rect(0, 0, width, height);
+    this.ctx.fillStyle = color;
+    this.ctx.fill();
+
+    this.ctx.font = '30px Arial';
+    this.ctx.fillStyle = 'white';
+    this.ctx.textAlign = 'center';
+    this.ctx.fillText(topText, width / 2, height / 2 - 30);
+    this.ctx.fillText(subtext, width / 2, height / 2 + 30);
   }
 
   private drawGameStats(): void {
