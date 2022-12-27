@@ -55,15 +55,6 @@ export default class Brick implements GameObject {
     let rightSideOfBrick = brickX + brickWidth;
     let bottomOfBrick = brickY + brickHeight;
 
-    if (bottomOfBall >= topOfBrick && topOfBall <= bottomOfBrick && ballX >= leftSideOfBrick && ballX + ballRadius <= rightSideOfBrick) {
-      return true;
-    }
-
-    /* 
-    if (bottomOfBall >= topOfBrick && topOfBall <= bottomOfBrick && ballX >= leftSideOfBrick && ballX <= rightSideOfBrick) {
-      return true;
-    } */
-
-    return false;
+    return bottomOfBall >= topOfBrick && topOfBall <= bottomOfBrick && ballX + ballRadius >= leftSideOfBrick && ballX - ballRadius <= rightSideOfBrick;
   }
 }
