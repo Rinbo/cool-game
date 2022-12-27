@@ -18,16 +18,6 @@ const createLevelDesign = (): number[][] => {
   return range(rows).map(_ => range(bricksPerRow).map(_ => Math.round(Math.random())));
 };
 
-/* export const createLevel = (game: Game, level: number): Array<Brick> => {
-  const { width: canvasWidth, height: canvasHeight } = properties.canvas;
-  const { bricksPerRow, brickHeightRatio, brickTopRowHeight } = properties.game;
-  const baseHeight = canvasHeight * brickTopRowHeight;
-  const brickHeight = canvasHeight * brickHeightRatio;
-  const brickWidth = canvasWidth / bricksPerRow;
-
-  return [new Brick(game, { x: 200, y: baseHeight }, { width: brickWidth, height: brickHeight }, getColor(1), true)];
-};
- */
 export const createLevel = (game: Game, level: number): Array<Brick> => {
   const { width: canvasWidth, height: canvasHeight } = properties.canvas;
   const { bricksPerRow, brickHeightRatio, brickTopRowHeight } = properties.game;
