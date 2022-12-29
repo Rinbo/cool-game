@@ -235,7 +235,7 @@ export default class Game {
   }
 
   private handleGameComplete(): void {
-    this.drawDoubleOverlayText('GAME COMPLETED!', 'Your score: ' + this.score, 'rgba(0,0,0,1)');
+    this.drawDoubleOverlayText('GAME COMPLETED! ', 'Your score: ' + this.score, 'rgba(0,0,0,1)');
     this.transition(GameState.WAITING);
     setTimeout(() => this.transition(GameState.NEW_GAME), 4000);
   }
@@ -243,6 +243,7 @@ export default class Game {
   private handleNewGame() {
     this.props = this.deepCopy(properties);
     this.lives = this.props.game.lives;
+    this.score = 0;
     this.level = 1;
     this.reset();
     this.drawOverlayText(this.isTouch ? 'TOUCH HERE TO BEGIN' : 'PRESS SPACE TO BEGIN');
