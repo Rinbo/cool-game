@@ -18,7 +18,7 @@ export default class EventHandler {
           break;
 
         case 'Space':
-          game.start();
+          game.init();
           break;
       }
     });

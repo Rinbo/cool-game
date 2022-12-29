@@ -49,6 +49,10 @@ export default class Game {
     EventHandler.initEventHandlers(this, this.paddle);
   }
 
+  init(): void {
+    if (this.state === GameState.NEW_GAME) this.start();
+  }
+
   start(): void {
     this.transition(GameState.RUNNABLE);
   }

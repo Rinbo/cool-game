@@ -39,7 +39,7 @@ function App() {
   const paddleRight = () => game.current!.getPaddle().moveRight();
   const paddleLeft = () => game.current!.getPaddle().moveLeft();
   const paddleStop = () => game.current!.getPaddle().stop();
-  const startGame = () => game.current!.start();
+  const startGame = () => game.current!.init();
 
   return (
     <div>
